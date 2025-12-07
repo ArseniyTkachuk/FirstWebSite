@@ -39,28 +39,12 @@
         </button>
         <span class="views-count">👁 {{ post.viewsCount || 0 }}</span>
       </div>
-    </div>
 
-    <!-- COMMENTS -->
-    <div class="comments-box">
-      <h3>Коментарі</h3>
-
-      <div v-if="post.comments?.length === 0" class="no-comments">
-        Коментарів поки немає.
-      </div>
-
-      <div v-for="comment in post.comments" :key="comment._id" class="comment-item">
-        <strong>{{ comment.user.fullName }}:</strong>
-        <p>{{ comment.text }}</p>
-      </div>
-
-      <div class="comment-input">
-        <input 
-          v-model="newComment" 
-          type="text" 
-          placeholder="Написати коментар..."
-        />
-        <button @click="sendComment">📩</button>
+      <!-- BUTTON TO COMMENTS PAGE -->
+      <div class="comments-button-section">
+        <button class="view-comments-btn" @click="goToComments">
+          💬 Переглянути коментарі ({{ post.comments?.length || 0 }})
+        </button>
       </div>
     </div>
   </div>
@@ -74,7 +58,6 @@ export default {
     return {
       post: {},
       user: {},
-      newComment: "",
       isLiked: false,
       animateLike: false,
       defaultAvatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
@@ -121,7 +104,7 @@ export default {
         this.post.likes = res.data.likes;
         this.isLiked = res.data.likedBy.some(id => id.toString() === this.user._id);
 
-        // Запуск анімації лайка
+        // Анімація лайка
         this.animateLike = true;
         setTimeout(() => this.animateLike = false, 300);
 
@@ -130,21 +113,8 @@ export default {
       }
     },
 
-    async sendComment() {
-      if (!this.newComment.trim()) return;
-
-      try {
-        const res = await axios.post(
-          `http://localhost:4444/posts/${this.post._id}/comment`,
-          { text: this.newComment },
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-
-        this.post.comments = res.data.comments;
-        this.newComment = "";
-      } catch (err) {
-        console.error(err);
-      }
+    goToComments() {
+      this.$router.push(`/posts/${this.post._id}/comments`);
     },
 
     async deletePost() {
@@ -281,46 +251,16 @@ export default {
   font-size: 14px;
 }
 
-.comments-box {
-  background: #1e1e2f;
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 12px;
+.comments-button-section {
+  margin-top: 12px;
 }
 
-.comment-item {
-  padding: 8px 0;
-  border-bottom: 1px solid #2c2f3f;
-}
-
-.comment-item p {
-  margin: 2px 0 0 0;
-}
-
-.comment-input {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.comment-input input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-}
-
-.comment-input button {
+.view-comments-btn {
   background: #4b8cff;
   border: none;
   padding: 8px 12px;
   color: white;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.no-comments {
-  color: #9ca3af;
-  margin-bottom: 10px;
 }
 </style>

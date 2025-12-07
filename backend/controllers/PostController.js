@@ -15,32 +15,29 @@ export const getAll = async(req, res) => {
     }
 } 
 
-export const getOne = async(req, res) => {
-    try {
-        const postId = req.params.id;
 
-        const doc = await PostModel.findOneAndUpdate(
-            { _id: postId },
-            { $inc: { viewsCount: 1 } },
-            { returnDocument: 'after' }
-        ).populate('user');
+export const getOne = async (req, res) => {
+  try {
+    const postId = req.params.id;
 
-        if (!doc) {
-            return res.status(404).json({
-                message: 'Стаття не знайдена'
-            });
-        }
+    const doc = await PostModel.findById(postId)
+      .populate('user', 'fullName avatarUrl') // дані автора посту
+      .populate({
+        path: 'comments',
+        populate: { path: 'user', select: 'fullName avatarUrl' },
+        options: { sort: { createdAt: 1 } } // сортуємо по даті створення
+      });
 
-        res.json(doc);
+    if (!doc) return res.status(404).json({ message: 'Стаття не знайдена' });
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            message: 'Не вдалося вернути статтю'
-        });
-    }
+    res.json(doc);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Не вдалося вернути статтю' });
+  }
+};
 
-}
+
 
 export const remove = async(req, res) => {
     try {

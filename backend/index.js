@@ -8,6 +8,7 @@ import { registerValidator, loginValidator, postCreateValidator } from './valida
 import checkAuth from './utils/checkAuth.js'
 import * as UserController from './controllers/UserController.js'
 import * as PostController from './controllers/PostController.js'
+import * as CommentController from './controllers/CommentController.js'
 
 mongoose
     .connect('mongodb+srv://admin:wwwwww@cluster0.wxjo6hs.mongodb.net/blog?appName=Cluster0',)
@@ -48,6 +49,8 @@ app.patch('/posts/:id', checkAuth, postCreateValidator, PostController.update)
 
 app.post('/posts/:id/like', checkAuth, PostController.likePost)
 
+app.post("/posts/:id/comment", checkAuth, CommentController.addComment)
+app.post("/comments/:id/like", checkAuth, CommentController.likeComment)
 
 app.listen(4444, (err) => {
     if (err){

@@ -5,6 +5,7 @@ import Profile from '../components/profile.vue'
 import CreatePost from '../components/create-post.vue'
 import PostViews from '../components/postViews.vue'
 import Login from '../components/login.vue'
+import Comments from '../components/comments.vue'
 
 const routes = [
   { path: '/', redirect: '/register' },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/profile', name: 'Profile', component: Profile }, // маршрут профілю
   { path: '/create-post', name: 'CreatePost', component: CreatePost}, // Маршрут для створення посту
   { path: '/posts/:id', name: 'PostViews', component: PostViews}, // Маршрут для перегляду посту
+  { path: '/posts/:id/comments', name: 'Comments', component: Comments}, // Маршрут для коментарів
 ]
 
 const router = createRouter({

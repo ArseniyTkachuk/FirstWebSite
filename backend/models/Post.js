@@ -8,13 +8,7 @@ const PostSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   likes: { type: Number, default: 0 },
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // <- важливо!
-  comments: [
-    {
-      text: String,
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      createdAt: { type: Date, default: Date.now }
-    }
-  ],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   viewsCount: { type: Number, default: 0 },
 }, { timestamps: true });
 
