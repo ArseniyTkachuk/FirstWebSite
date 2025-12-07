@@ -28,12 +28,16 @@
       <h3 class="post-title">{{ post.title }}</h3>
       <p class="post-text">{{ post.text }}</p>
 
-      <!-- LIKE BUTTON -->
+      <!-- LIKE & VIEWS -->
       <div class="like-section">
         <button class="like-btn" @click="toggleLike">
-          <span :class="{ liked: isLiked }">❤️</span>
+          <span 
+            class="like-icon" 
+            :class="{ liked: isLiked, animated: animateLike }"
+          >{{ isLiked ? '❤️' : '🤍' }}</span>
           {{ post.likes || 0 }}
         </button>
+        <span class="views-count">👁 {{ post.viewsCount || 0 }}</span>
       </div>
     </div>
 
@@ -50,7 +54,6 @@
         <p>{{ comment.text }}</p>
       </div>
 
-      <!-- Comment input -->
       <div class="comment-input">
         <input 
           v-model="newComment" 
@@ -73,6 +76,7 @@ export default {
       user: {},
       newComment: "",
       isLiked: false,
+      animateLike: false,
       defaultAvatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     };
   },
@@ -83,7 +87,6 @@ export default {
   },
 
   methods: {
-    // Отримання даних користувача
     async fetchUser() {
       try {
         const res = await axios.get("http://localhost:4444/auth/me", {
@@ -95,21 +98,18 @@ export default {
       }
     },
 
-    // Отримання посту
     async fetchPost() {
       try {
         const postId = this.$route.params.id;
         const res = await axios.get(`http://localhost:4444/posts/${postId}`);
         this.post = res.data;
 
-        // Перевірка, чи користувач лайкнув пост
         this.isLiked = this.post.likedBy?.some(id => id.toString() === this.user._id);
       } catch (err) {
         console.error(err);
       }
     },
 
-    // ❤️ Лайк/дизлайк посту
     async toggleLike() {
       try {
         const res = await axios.post(
@@ -120,12 +120,16 @@ export default {
 
         this.post.likes = res.data.likes;
         this.isLiked = res.data.likedBy.some(id => id.toString() === this.user._id);
+
+        // Запуск анімації лайка
+        this.animateLike = true;
+        setTimeout(() => this.animateLike = false, 300);
+
       } catch (err) {
         console.error(err);
       }
     },
 
-    // 💬 Відправка коментаря
     async sendComment() {
       if (!this.newComment.trim()) return;
 
@@ -143,7 +147,6 @@ export default {
       }
     },
 
-    // Видалення посту
     async deletePost() {
       if (!confirm("Ви точно хочете видалити цей пост?")) return;
 
@@ -241,6 +244,9 @@ export default {
 }
 
 .like-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   margin-top: 10px;
 }
 
@@ -252,10 +258,27 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.liked {
+.like-icon {
+  font-size: 22px;
+  transition: transform 0.3s ease;
+}
+
+.like-icon.animated {
+  transform: scale(1.5);
+}
+
+.like-icon.liked {
   color: #ff4d6d;
+}
+
+.views-count {
+  color: #9ca3af;
+  font-size: 14px;
 }
 
 .comments-box {
