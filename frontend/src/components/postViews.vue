@@ -3,7 +3,6 @@
     <!-- TOP BAR -->
     <div class="top-bar">
       <button class="back-btn" @click="$router.back()">⬅ Назад</button>
-      <h2>Пост</h2>
       <button 
         v-if="post.user?._id === user._id" 
         class="delete-btn" 
@@ -14,8 +13,11 @@
     </div>
 
     <!-- POST CONTENT -->
-    <div class="post-card">
-      <div class="post-header">
+    <div class="post">
+      <div 
+      class="post-header"
+      @click="goToUserProfile(post.user._id)"
+      >
         <img 
           :src="post.user?.avatarUrl ? `http://localhost:4444${post.user.avatarUrl}` : defaultAvatar" 
           class="post-avatar"
@@ -113,6 +115,10 @@ export default {
       }
     },
 
+    goToUserProfile(userID) {
+      this.$router.push(`/profile/${userID}`);
+    },
+
     goToComments() {
       this.$router.push(`/posts/${this.post._id}/comments`);
     },
@@ -178,7 +184,7 @@ export default {
   background: #e05555;
 }
 
-.post-card {
+.post {
   background: #1e1e2f;
   padding: 16px;
   border-radius: 12px;
@@ -191,6 +197,12 @@ export default {
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 2%;
+}
+.post-header:hover {
+  background: #2c2c3f;
 }
 
 .post-avatar {
@@ -231,6 +243,10 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
+  transition: 0.5s;
+}
+.like-btn:hover {
+  background: #45456c;
 }
 
 .like-icon {

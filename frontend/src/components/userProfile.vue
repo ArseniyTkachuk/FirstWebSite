@@ -13,6 +13,11 @@
       />
       <h3 class="username">{{ user.fullName || 'Username' }}</h3>
       <p class="email">{{ user.email }}</p>
+
+      <!-- підписатися -->
+      <!-- <button class="subscribe-true" @click="subscribe">➕ Subscribe</button> -->
+      <button class="subscribe-false" @click="subscribe">Unsubscribe</button>
+
     </div>
 
     <!-- User Posts -->
@@ -85,6 +90,10 @@ export default {
 
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`);
+    },
+
+    subscribe(){
+
     },
   },
 };
@@ -161,6 +170,36 @@ export default {
   font-size: 14px;
   color: #9ca3af;
   margin-bottom: 10px;
+}
+
+.subscribe-true {
+  padding: 8px 16px;
+  background: #6b8cff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.subscribe-true:hover {
+  background: #5a75e6;
+}
+
+.subscribe-false {
+  padding: 8px 16px;
+  background: #202c5f;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.subscribe-false:hover {
+  background: #141b3a;
 }
 
 .user-posts {
