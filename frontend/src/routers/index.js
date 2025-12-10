@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../components/home.vue'       // головна сторінка
 import Register from '../components/register.vue' // сторінка реєстрації
 import Profile from '../components/profile.vue'
+import UserProfile from '../components/userProfile.vue'
 import CreatePost from '../components/create-post.vue'
 import PostViews from '../components/postViews.vue'
 import Login from '../components/login.vue'
@@ -17,6 +18,7 @@ const routes = [
   { path: '/create-post', name: 'CreatePost', component: CreatePost}, // Маршрут для створення посту
   { path: '/posts/:id', name: 'PostViews', component: PostViews}, // Маршрут для перегляду посту
   { path: '/posts/:id/comments', name: 'Comments', component: Comments}, // Маршрут для коментарів
+  { path: '/profile/:id', name: 'UserProfile', component: UserProfile }, // Маршрут профілю юзера
 ]
 
 const router = createRouter({

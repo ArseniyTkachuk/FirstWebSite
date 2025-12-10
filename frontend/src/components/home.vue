@@ -31,9 +31,9 @@
           v-for="post in posts"
           :key="post._id"
           class="post"
-          @click="goToPost(post._id)"
         >
-          <div class="post-header">
+        
+          <div class="post-header" @click="goToUserProfile(post.user._id)">
             <img
               :src="post.user && post.user.avatarUrl ? `http://localhost:4444${post.user.avatarUrl}` : defaultAvatar"
               class="post-avatar"
@@ -43,6 +43,10 @@
             </span>
           </div>
 
+          <div 
+          class="post-body"
+          @click="goToPost(post._id)"
+          >
           <!-- Фото посту зверху -->
           <img
             v-if="post.imageUrl"
@@ -52,6 +56,7 @@
           
           <div class="post-title">{{ post.title }}</div>
           <div class="post-text">{{ post.text }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -101,6 +106,10 @@ export default {
 
     goToProfile() {
       this.$router.push("/profile");
+    },
+
+    goToUserProfile(userID) {
+      this.$router.push(`/profile/${userID}`);
     },
 
     goToPost(postId) {
@@ -222,6 +231,7 @@ export default {
   gap: 15px;
 }
 
+/* POST */
 .post {
   background: #1e1e2f;
   padding: 12px;
@@ -250,6 +260,9 @@ export default {
   gap: 10px;
   margin-bottom: 8px;
 }
+.post-header:hover {
+  background: #2a2a54;
+}
 
 .post-avatar {
   width: 36px;
@@ -261,6 +274,11 @@ export default {
 
 .post-username {
   font-weight: bold;
+}
+
+/* POST BODY */
+.post-body:hover {
+  background: #2c2c3f;
 }
 
 /* POST CONTENT */

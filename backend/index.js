@@ -34,6 +34,7 @@ app.use(express.json());
 app.post('/auth/register', upload.single('avatar'), registerValidator, UserController.register)
 app.post('/auth/login', loginValidator, UserController.login)
 app.get('/auth/me', checkAuth, UserController.getMe)
+app.get('/auth/:id', UserController.getUser)
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
     res.json({

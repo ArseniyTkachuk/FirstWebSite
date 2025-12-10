@@ -111,3 +111,26 @@ export const getMe = async (req, res) => {
         })
     }
 }
+
+
+export const getUser = async (req, res) => {
+    try{
+        const userid = req.params.id;
+        const user = await UserModel.findById(userid)
+
+        if (!user){
+            return res.status(404).json({
+                message: 'Користувач не найдений'
+            })
+        }
+
+        const {passwordHash, ... userData} = user._doc
+
+        res.json({userData})
+    } catch (err){
+        console.log(err)
+        res.status(500).json({
+            message: 'Нема доступа'
+        })
+    }
+}
