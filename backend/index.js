@@ -51,6 +51,7 @@ app.post('/posts/:id/like', checkAuth, PostController.likePost)
 
 app.post("/posts/:id/comment", checkAuth, CommentController.addComment)
 app.post("/comments/:id/like", checkAuth, CommentController.likeComment)
+app.delete("/comments/:id", checkAuth, CommentController.remove)
 
 app.listen(4444, (err) => {
     if (err){

@@ -57,3 +57,29 @@ export const likeComment = async (req, res) => {
     res.status(500).json({ message: "Не вдалося лайкнути коментар" });
   }
 };
+
+
+
+export const remove = async(req, res) => {
+    try {
+        const commentId = req.params.id;
+
+        const doc = await CommentModel.findByIdAndDelete(commentId);
+
+        if (!doc) {
+            return res.status(404).json({
+                message: 'Коментарій не знайдений'
+            });
+        }
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Не вдалося видалити коментарій'
+        });
+    }
+}

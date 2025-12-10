@@ -20,7 +20,12 @@ export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const doc = await PostModel.findById(postId)
+    const doc = await PostModel.findOneAndUpdate(
+            { _id: postId },
+            { $inc: { viewsCount: 1 } },
+            { returnDocument: 'after' }
+        )
+
       .populate('user', 'fullName avatarUrl') // дані автора посту
       .populate({
         path: 'comments',
@@ -61,8 +66,6 @@ export const remove = async(req, res) => {
             message: 'Не вдалося видалити статтю'
         });
     }
-
-
 }
 
 export const update = async(req, res) => {

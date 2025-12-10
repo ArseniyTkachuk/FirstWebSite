@@ -25,6 +25,7 @@
         />
         <strong>{{ comment.user?.fullName || 'Видалений користувач' }}</strong>
       </div>
+
       <p class="comment-text">{{ comment.text }}</p>
       <p class="comment-date">{{ formatDate(comment.createdAt) }}</p>
 
@@ -37,17 +38,26 @@
         <span>{{ isCommentLiked(comment) ? '❤️' : '🤍' }}</span>
         {{ comment.likes || 0 }}
       </button>
+
+      <!-- DELETE BUTTON -->
+      <button 
+        v-if="canDeleteComment(comment)"
+        class="delete-comment-btn"
+        @click="deleteComment(comment._id)"
+      >
+        🗑 Видалити
+      </button>
     </div>
 
-    <!-- NEW COMMENT INPUT -->
-    <div class="new-comment-section">
+    <!-- FIXED COMMENT INPUT BAR -->
+    <div class="new-comment-fixed">
       <input 
         v-model="newComment" 
         type="text" 
         placeholder="Написати коментар..."
         @keyup.enter="sendComment"
       />
-      <button @click="sendComment">Відправити</button>
+      <button @click="sendComment">▶</button>
     </div>
   </div>
 </template>
@@ -62,7 +72,7 @@ export default {
       user: {},
       newComment: "",
       defaultAvatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      animatingComment: null, // id коментаря для анімації лайка
+      animatingComment: null,
     };
   },
 
@@ -108,7 +118,6 @@ export default {
         comment.likes = res.data.likes;
         comment.likedBy = res.data.likedBy;
 
-        // запуск анімації
         this.animatingComment = comment._id;
         setTimeout(() => (this.animatingComment = null), 300);
       } catch (err) {
@@ -129,9 +138,35 @@ export default {
 
         this.post.comments = res.data.comments;
         this.newComment = "";
+
+        setTimeout(() => {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        }, 100);
       } catch (err) {
         console.error(err);
       }
+    },
+
+    async deleteComment(commentId) {
+      try {
+        await axios.delete(
+          `http://localhost:4444/comments/${commentId}`,
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+
+        this.post.comments = this.post.comments.filter(c => c._id !== commentId);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    canDeleteComment(comment) {
+      if (!this.user?._id) return false;
+
+      const isCommentAuthor = comment.user?._id === this.user._id;
+      const isPostAuthor = this.post.user?._id === this.user._id;
+
+      return isPostAuthor || isCommentAuthor;
     },
 
     formatDate(date) {
@@ -152,6 +187,7 @@ export default {
 <style scoped>
 .comments-page {
   padding: 15px;
+  padding-bottom: 90px;
   font-family: Arial, sans-serif;
   background: #111827;
   color: #fff;
@@ -203,8 +239,8 @@ export default {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  object-fit: cover;
   border: 1px solid #4b5563;
+  object-fit: cover;
 }
 
 .comment-text {
@@ -228,10 +264,6 @@ export default {
   transition: transform 0.2s ease;
 }
 
-.comment-like-btn span {
-  display: inline-block;
-}
-
 .comment-like-btn.liked span {
   color: #ff4d6d;
 }
@@ -240,30 +272,56 @@ export default {
   transform: scale(1.4);
 }
 
-.new-comment-section {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.new-comment-section input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
+.delete-comment-btn {
+  background: #ff4d4d;
   border: none;
-}
-
-.new-comment-section button {
-  background: #4b8cff;
-  border: none;
-  padding: 8px 12px;
-  color: white;
+  padding: 6px 10px;
+  margin-top: 6px;
   border-radius: 8px;
   cursor: pointer;
+  color: white;
+  font-size: 14px;
+}
+
+.delete-comment-btn:hover {
+  background: #ff3333;
 }
 
 .no-comments {
   color: #9ca3af;
   margin-bottom: 10px;
+}
+
+.new-comment-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1e1e2f;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #374151;
+  z-index: 200;
+}
+
+.new-comment-fixed input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #2c2f45;
+  color: white;
+}
+
+.new-comment-fixed button {
+  background: #4b8cff;
+  border: none;
+  padding: 0 14px;
+  color: white;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
 }
 </style>
