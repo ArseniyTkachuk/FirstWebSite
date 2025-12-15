@@ -199,7 +199,7 @@ export default {
   margin-bottom: 12px;
   cursor: pointer;
   border-radius: 8px;
-  padding: 2%;
+  padding: 10px;
 }
 .post-header:hover {
   background: #2c2c3f;

@@ -259,6 +259,8 @@ export default {
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 8px;
 }
 .post-header:hover {
   background: #2a2a54;
@@ -283,13 +285,13 @@ export default {
 
 /* POST CONTENT */
 .post-title {
-  font-size: 16px;
+  font-size: 30px;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 
 .post-text {
-  font-size: 14px;
+  font-size: 20px;
   color: #d1d5db;
   white-space: pre-wrap;
 }

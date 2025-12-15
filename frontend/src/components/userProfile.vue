@@ -22,7 +22,7 @@
 
     <!-- User Posts -->
     <div class="user-posts">
-      <h3>Мої пости</h3>
+      <h3>Пости</h3>
       <div v-if="posts.length === 0" class="placeholder">
         Поки що немає постів…
       </div>
@@ -95,6 +95,24 @@ export default {
     subscribe(){
 
     },
+
+    async checkUser(){
+      const userId = this.$route.params.id;
+      const res = await axios.get("http://localhost:4444/auth/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const us = res.data.userData;
+
+      if ( us._id == userId){
+        this.$router.push(`/profile`);
+      }
+    },
+  },
+
+  created(){
+    this.checkUser()
   },
 };
 </script>

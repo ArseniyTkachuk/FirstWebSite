@@ -9,7 +9,7 @@ import Login from '../components/login.vue'
 import Comments from '../components/comments.vue'
 
 const routes = [
-  { path: '/', redirect: '/register' },
+  { path: '/', redirect: '/home' },
 
   { path: '/home', name: 'Home', component: Home },          // маршрут головної
   { path: '/register', name: 'Register', component: Register }, // маршрут реєстрації
@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token")
 
   // маршрути, які можна відвідувати без авторизації
-  const publicPages = ['/register', '/login', '/home', '/posts/:id']
+  const publicPages = ['/register', '/login', '/home', '/posts/:id', '/profile/:id' ]
 
   // якщо маршрут не публічний
   const authRequired = !publicPages.includes(to.path)
@@ -41,6 +41,7 @@ router.beforeEach((to, from, next) => {
     alert("Спочатку авторизуйтеся")
     return next('/register') // якщо не авторизований → на register
   }
+
 
   next()
 })

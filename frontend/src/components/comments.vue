@@ -18,7 +18,10 @@
     </div>
 
     <div v-for="comment in post.comments" :key="comment._id" class="comment-item">
-      <div class="comment-header">
+      <div 
+      class="comment-header"
+      @click="goToUserProfile(post.user._id)"
+      >
         <img 
           :src="comment.user?.avatarUrl ? `http://localhost:4444${comment.user.avatarUrl}` : defaultAvatar" 
           class="comment-avatar"
@@ -179,7 +182,11 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
       });
-    }
+    },
+
+    goToUserProfile(userID) {
+      this.$router.push(`/profile/${userID}`);
+    },
   },
 };
 </script>
@@ -233,6 +240,13 @@ export default {
   align-items: center;
   gap: 10px;
   margin-bottom: 6px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.comment-header:hover {
+  background: #2c2c3f;
+  border-radius: 8px;
 }
 
 .comment-avatar {

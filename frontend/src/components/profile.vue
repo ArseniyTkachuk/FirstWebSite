@@ -2,7 +2,7 @@
   <div class="profile-page">
     <!-- TOP BAR -->
     <div class="top-bar">
-      <button class="back-btn" @click="$router.back()">⬅ Назад</button>
+      <button class="back-btn" @click="$router.push(`/home`);">⬅ Назад</button>
       <h2>Профіль</h2>
       <button class="logout-btn" @click="logout">Вийти</button>
     </div>
@@ -148,7 +148,7 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
-  margin-right: 4%;
+  margin-right: 10%;
 }
 
 .logout-btn:hover {
